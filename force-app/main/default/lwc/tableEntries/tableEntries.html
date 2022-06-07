@@ -1,0 +1,136 @@
+<template>
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media" style='display:flex;align-items:center;'>
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning-icon icon-name="standard:timesheet"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate">Time Entries</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <ul class="slds-button-group-list">
+                            <li style='margin-right:5px;'>
+                                <lightning-button label='New' icon-name='utility:add' onclick={handleAdd}>
+                                </lightning-button>
+                            </li>
+                            <li>
+                                <lightning-button label='Save' icon-name='utility:save' onclick={handleSave}>
+                                </lightning-button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+        aria-label="Example table of Opportunities with vertical borders">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Case Number">Case Number</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Customer Name">Customer Name</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Task">Task</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Work Type">Work Type</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Start Time">Start Time</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="End Time">End Time</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Hours Worked">Hours Worked</div>
+                </th>
+                <th class="" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <template if:true={rows} for:each={rows} for:item="row" for:index="index">
+                <tr class="slds-hint-parent" key={row.rowNumber}>
+                    <th data-label="Case Number" scope="row">
+                        <div>
+                            <c-lwc-lookup object-api-name="Case" icon-name="standard:case"
+                                onrecordselection={handleSelection} row={row.rowNumber}></c-lwc-lookup>
+                        </div>
+                    </th>
+                    <td data-label="Contact Name">
+                        <div>
+                            <!--c-lwc-lookup object-api-name="Contact" icon-name="standard:contact"
+                                onrecordselection={handleSelection} row={row.rowNumber}></c-lwc-lookup-->
+                            <lightning-record-edit-form object-api-name="Case" record-id={row.CaseId}>
+                                <lightning-input-field field-name="ContactId" variant="label-hidden">
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                    </td>
+                    <td data-label="Task">
+                        <div>
+                            <lightning-combobox name="Task" label="Task" placeholder="Select Task Type"
+                                options={taskOptions} variant="label-hidden" data-row={row.rowNumber}
+                                onchange={handleTaskChange}>
+                            </lightning-combobox>
+                        </div>
+                    </td>
+                    <td data-label="Casework Activity">
+                        <div>
+                            <lightning-combobox name="CaseWork Activity" label="CaseWork Activity"
+                                placeholder="Select Task Type" options={caseworkOptions} variant="label-hidden"
+                                data-row={row.rowNumber} onchange={handleCaseWorkChange}>
+                            </lightning-combobox>
+                        </div>
+                    </td>
+                    <td data-label="Start Time">
+                        <div>
+                            <lightning-input type="datetime" name="Start Date/Time" label="Start Date/Time"
+                                variant='label-hidden' data-row={row.rowNumber} data-field="start"
+                                onchange={handleStartDateChange} value={row.StartDateTime}></lightning-input>
+                        </div>
+                    </td>
+                    <td data-label="End Time">
+                        <div>
+                            <div>
+                                <lightning-input type="datetime" name="end Date/Time" label="end Date/Time"
+                                    variant='label-hidden' data-row={row.rowNumber} data-field="end"
+                                    onchange={handleEndDateChange} value={row.EndDateTime}></lightning-input>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-label="Contact">
+                        <div class="slds-truncate">
+                            {row.hoursWorked}
+                        </div>
+                    </td>
+                    <td data-label="Contact">
+                        <div class="slds-truncate">
+                            <lightning-button label='Delete' icon-name="utility:delete" data-row={row.rowNumber}
+                                onclick={handleDelete}></lightning-button>
+                        </div>
+                    </td>
+                </tr>
+            </template>
+
+        </tbody>
+    </table>
+</template>
